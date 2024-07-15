@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import CustomersTable from "./components/customersTable/CustomersTable";
+import Header from "./components/header/Header";
+import GraphComponent from "./components/graphComponent/GraphComponent";
 
 function App() {
   return (
     <>
-      <h1>App</h1>
+      <Header />
       <CustomersTable />
+      <GraphComponent />
     </>
   );
 }
