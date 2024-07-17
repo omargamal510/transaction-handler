@@ -1,16 +1,21 @@
 {
   "files": {
-    "main.css": "/transaction-handler/static/css/main.f855e6bc.css",
-    "main.js": "/transaction-handler/static/js/main.aa931b91.js",
-    "static/js/453.5d4d5680.chunk.js": "/transaction-handler/static/js/453.5d4d5680.chunk.js",
-    "static/media/logo.svg": "/transaction-handler/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "main.css": "/transaction-handler/static/css/main.0b894179.css",
+    "main.js": "/transaction-handler/static/js/main.58eabcc0.js",
+    "static/media/fa-solid-900.ttf": "/transaction-handler/static/media/fa-solid-900.07ed6d5fa32c1d54af0f.ttf",
+    "static/media/fa-brands-400.ttf": "/transaction-handler/static/media/fa-brands-400.0ff70dcbf135d859ebf3.ttf",
+    "static/media/fa-solid-900.woff2": "/transaction-handler/static/media/fa-solid-900.93f719f4d62bfa3e748c.woff2",
+    "static/media/fa-brands-400.woff2": "/transaction-handler/static/media/fa-brands-400.bb8d5a145e22822103fb.woff2",
+    "static/media/fa-regular-400.ttf": "/transaction-handler/static/media/fa-regular-400.17a6e1aebccdbaa39e78.ttf",
+    "static/media/fa-regular-400.woff2": "/transaction-handler/static/media/fa-regular-400.bc3722686635b5f86132.woff2",
+    "static/media/fa-v4compatibility.ttf": "/transaction-handler/static/media/fa-v4compatibility.0f6cb412603527bda691.ttf",
+    "static/media/fa-v4compatibility.woff2": "/transaction-handler/static/media/fa-v4compatibility.6cfec8414be20e2c3426.woff2",
     "index.html": "/transaction-handler/index.html",
-    "main.f855e6bc.css.map": "/transaction-handler/static/css/main.f855e6bc.css.map",
-    "main.aa931b91.js.map": "/transaction-handler/static/js/main.aa931b91.js.map",
-    "453.5d4d5680.chunk.js.map": "/transaction-handler/static/js/453.5d4d5680.chunk.js.map"
+    "main.0b894179.css.map": "/transaction-handler/static/css/main.0b894179.css.map",
+    "main.58eabcc0.js.map": "/transaction-handler/static/js/main.58eabcc0.js.map"
   },
   "entrypoints": [
-    "static/css/main.f855e6bc.css",
-    "static/js/main.aa931b91.js"
+    "static/css/main.0b894179.css",
+    "static/js/main.58eabcc0.js"
   ]
 }
