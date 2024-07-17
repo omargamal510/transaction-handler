@@ -24,13 +24,14 @@ export default function CustomersTable() {
   const [selectFilter, setSelectFilter] = useState("name"); //
 
   const [graphShow, setGraphShow] = useState(false);
+  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [customersRes, transactionsRes] = await Promise.all([
-          getApi("http://localhost:3001/customers"),
-          getApi("http://localhost:3001/transactions"),
+          getApi("https://gist.githubusercontent.com/omargamal510/560491b764c9ba5bc3bf5131c9d1ac9a/raw/2d29917a7c6a60d8defb20a26b94f3be46ef7cf8/db.json"),
+          getApi("https://gist.githubusercontent.com/omargamal510/6cde20ce329f9dbb3f4c0fd2a57df742/raw/c684ddbac6b059364589b61a78642bd092f92d35/db.json"),
         ]);
         if (customersRes && transactionsRes) {
           originalData = customersRes;

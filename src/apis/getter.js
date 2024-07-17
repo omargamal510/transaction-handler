@@ -1,6 +1,7 @@
 export default async function getApi(endPoint) {
   try {
-    const response = await fetch(endPoint);
+    const API_URL = endPoint;
+    const response = await fetch(API_URL);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
