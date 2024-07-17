@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import getApi from "../../apis/getter";
+import GraphComponent from "../graphComponent/GraphComponent";
 
 let originalData = [];
 let originalTransactions = [];
+
+let amounts = [];
+let dates = [];
+
 
 export default function CustomersTable() {
   const [data, setData] = useState([]);
@@ -10,6 +15,12 @@ export default function CustomersTable() {
   const [searchName, setSearchName] = useState("");
   const [searchAmount, setSearchAmount] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const [sentAmounts, setSentAmounts] = useState();
+  const [sentDates, setSentDates] = useState([]);
+  const [selectedName , setSelectedName] = useState();
+
+  const [graphShow , setGraphShow] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,22 +51,21 @@ export default function CustomersTable() {
       .reduce((acc, t) => acc + t.amount, 0);
   };
 
-  useEffect(() => {
-    handleFilter();
-  }, [searchName, setData]);
+  // const filteredAmounts = transactions.filter(
+  //   (t) => t.customer_id === Number(customer.id)
+  // );
 
-  function handleFilter() {
-    if (searchName.trim === " ") {
-      setData(originalData);
-    } else {
-      const filteredArray = data.filter((el) => el.name.includes(searchName));
-      setData(filteredArray);
-    }
-  }
+  // console.log(filteredAmounts);
+
+  const filteredData = useMemo(() => {
+    return data.filter((el) =>
+      el.name.toLowerCase().includes(searchName.toLowerCase())
+    );
+  }, [data, transactions, searchName, searchAmount]);
 
   function handleNameChange(e) {
     setSearchName(e.target.value);
-    handleFilter();
+    console.log(filteredData);
   }
 
   function handleAmountChange(e) {
@@ -68,9 +78,7 @@ export default function CustomersTable() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4" onClick={handleFilter}>
-        Customers Table
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Customers Table</h1>
 
       <div className="filter flex gap-x-3 text-black">
         <input
@@ -92,10 +100,10 @@ export default function CustomersTable() {
         <h2>Total Transactions: {transactions ? transactions.length : 0}</h2>
       </div>
 
-      {!data || data.length === 0 ? (
+      {!filteredData || filteredData.length === 0 ? (
         <p className="text-gray-500">No customers found.</p>
       ) : (
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+        <table className={`min-w-full bg-white border border-gray-300 rounded-lg shadow-md ${graphShow && 'hidden'}`}>
           <thead>
             <tr className="bg-teal-500 text-black">
               <th className="py-3 px-4 text-left">ID</th>
@@ -105,8 +113,25 @@ export default function CustomersTable() {
             </tr>
           </thead>
           <tbody>
-            {data.map((customer) => (
-              <tr key={customer.id} className="hover:bg-gray-100 text-black">
+            {filteredData.map((customer) => (
+              <tr
+                onClick={() => {
+                  {
+                    amounts = transactions
+                      .filter((t) => t.customer_id === Number(customer.id))
+                      .map((t) => t.amount);
+                    dates = transactions
+                      .filter((t) => t.customer_id === Number(customer.id))
+                      .map((t) => t.date);
+                  }
+                  setSentAmounts(amounts);
+                  setSentDates(dates);
+                  setGraphShow(true);
+                  setSelectedName(customer.name);
+                }}
+                key={customer.id}
+                className="hover:bg-gray-100 text-black"
+              >
                 <td className="py-3 px-4 border-b border-gray-300">
                   {customer.id}
                 </td>
@@ -133,6 +158,8 @@ export default function CustomersTable() {
           </tbody>
         </table>
       )}
+
+      {graphShow && <GraphComponent amounts={sentAmounts} selectedName={selectedName} setGraphShow={setGraphShow} dates={sentDates} />}
     </div>
   );
 }
