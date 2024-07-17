@@ -9,8 +9,8 @@ export default function GraphComponent({amounts, dates, setGraphShow, selectedNa
 
   return (
     <>
-    <h2 className="text-center my-10 bg-white text-black" onClick={()=> setGraphShow(false)}> Back  </h2> 
-    <h3>{selectedName}</h3>
+    <button className="text-center my-10 bg-teal-500 text-white px-5 py-2" onClick={()=> setGraphShow(false)}> <i className="fa fa-angle-left"></i> Back  </button> 
+    <h3 className="text-center text-4xl mb-20">{selectedName}</h3>
       <div className="graph flex justify-center">
         <div className="w-1/2">
           <Bar
@@ -20,9 +20,9 @@ export default function GraphComponent({amounts, dates, setGraphShow, selectedNa
                 {
                   label: "Transactions amount",
                   data: amounts,
-                  backgroundColor: ["#F00", "#F00", "#F00"],
+                  backgroundColor: ["#14b8a6"],
                   borderRadius: 10,
-                  hoverBackgroundColor: "#00F",
+                  hoverBackgroundColor: "#134e4a",
                 },
               ],
             }}
