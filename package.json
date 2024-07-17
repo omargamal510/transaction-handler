@@ -2,7 +2,6 @@
   "name": "transaction-handler-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://omargamal510.github.io/transaction-handler",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
