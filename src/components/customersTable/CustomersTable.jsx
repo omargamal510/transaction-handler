@@ -2,13 +2,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import getApi from "../../apis/getter";
 import GraphComponent from "../graphComponent/GraphComponent";
 
-
 let originalData = [];
 let originalTransactions = [];
 
 let amounts = [];
 let dates = [];
-
 
 export default function CustomersTable() {
   const [data, setData] = useState([]);
@@ -19,9 +17,13 @@ export default function CustomersTable() {
 
   const [sentAmounts, setSentAmounts] = useState();
   const [sentDates, setSentDates] = useState([]);
-  const [selectedName , setSelectedName] = useState();
+  const [selectedName, setSelectedName] = useState();
 
-  const [graphShow , setGraphShow] = useState(false);
+  const [nameFilter, setNameFilter] = useState("name");
+  const [amountFilter, setAmountFilter] = useState("amount");
+  const [selectFilter, setSelectFilter] = useState("name"); //
+
+  const [graphShow, setGraphShow] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,20 +54,39 @@ export default function CustomersTable() {
       .reduce((acc, t) => acc + t.amount, 0);
   };
 
-  const filteredData = useMemo(() => {
-    return data.filter((el) =>
-      el.name.toLowerCase().includes(searchName.toLowerCase())
-    );
-  }, [data, transactions, searchName, searchAmount]);
+const filteredData = useMemo(() => {
+  return data.filter((customer) => {
+    const matchesName = customer.name.toLowerCase().includes(searchName.toLowerCase());
+
+    // Check if any transaction amount matches the searchAmount
+    const customerAmounts = transactions
+      .filter((t) => t.customer_id === Number(customer.id))
+      .map((t) => t.amount);
+
+    const matchesPayment = searchAmount
+      ? customerAmounts.includes(Number(searchAmount))
+      : true;
+
+    // Debugging logs
+    return matchesName && matchesPayment; 
+  });
+}, [data, transactions, searchName, searchAmount]);
+
 
   function handleNameChange(e) {
     setSearchName(e.target.value);
-    console.log(filteredData);
   }
 
   function handleAmountChange(e) {
     setSearchAmount(e.target.value);
+    console.log(filteredData);
+    console.log(transactions);
   }
+
+  const handleFilterChange = (e) => {
+    const selectedFilter = e.target.value;
+    setSelectFilter(selectedFilter);
+  };
 
   if (loading) {
     return <p className="text-gray-500">Loading...</p>;
@@ -75,23 +96,34 @@ export default function CustomersTable() {
     <div className="container mx-auto p-4">
       {/* <h1 className="text-2xl font-bold mb-4 text-center">Customers Table</h1> */}
 
-      <form onSubmit={(e) => {e.preventDefault()}} className="filter flex gap-x-3 justify-center text-black min-w-100">
-        <input
-          value={searchName}
-          onChange={handleNameChange}
-          type="text"
-          placeholder="filter by name"
-          className="w-full p-2 rounded-3xl text-lg outline-teal-500"
-        />
-        <input
-          value={searchAmount}
-          onChange={handleAmountChange}
-          type="text"
-          placeholder="filter by amount"
-          className="w-full p-2 rounded-3xl text-lg outline-teal-500"
-        />
-      </form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+        className="filter flex gap-x-3 justify-center text-black min-w-100"
+      >
 
+          <input
+            value={searchName}
+            onChange={handleNameChange}
+            type="text"
+            placeholder="filter by name"
+            className="w-1/2 p-2 rounded-3xl text-lg outline-teal-500"
+          />
+
+          <input
+            value={searchAmount}
+            onChange={handleAmountChange}
+            type="text"
+            placeholder="filter by amount"
+            className="w-1/2 p-2 rounded-3xl text-lg outline-teal-500"
+          />
+
+        {/* <select className="" value={selectFilter} onChange={handleFilterChange}>
+          <option value="name">Filter by name</option>
+          <option value="amount">Filter by amount</option>
+        </select> */}
+      </form>
 
       {/* <div className="mb-4">
         <h2>Total Customers: {data.length}</h2>
@@ -101,14 +133,18 @@ export default function CustomersTable() {
       {!filteredData || filteredData.length === 0 ? (
         <p className="text-gray-500">No customers found.</p>
       ) : (
-        <table className={`min-w-full my-10 bg-white rounded-3xl shadow-dark-grey overflow-hidden  ${graphShow && 'hidden'}`}>
+        <table
+          className={`min-w-full my-10 bg-white rounded-3xl shadow-dark-grey overflow-hidden  ${
+            graphShow && "hidden"
+          }`}
+        >
           <thead className="bg-teal-500 rounded-xl  text-black">
             <tr className="text-black">
               <th className="py-3 px-4 text-left">#ID</th>
               <th className="py-3 px-4 text-left">Name</th>
               <th className="py-3 px-4 text-left">Transactions Date</th>
               <th className="py-3 px-4 text-left">Transactions Amount</th>
-                            <th className="py-3 px-4 text-left">More Details</th>
+              <th className="py-3 px-4 text-left">More Details</th>
               <th></th>
             </tr>
           </thead>
@@ -136,13 +172,16 @@ export default function CustomersTable() {
                   {customer.id}
                 </td>
                 <td className="font-bold py-3 px-4 border-b border-gray-300">
-                <i className="fas fa-user text-teal-500"></i> {customer.name}
+                  <i className="fas fa-user text-teal-500"></i> {customer.name}
                 </td>
                 <td className="py-3 px-4 border-b border-gray-300">
                   {transactions
                     .filter((t) => t.customer_id === Number(customer.id))
                     .map((t) => (
-                      <p key={t.id}><i className="fas fa-calendar text-teal-500"></i>  {t.date}</p>
+                      <p key={t.id}>
+                        <i className="fas fa-calendar text-teal-500"></i>{" "}
+                        {t.date}
+                      </p>
                     ))}
                 </td>
                 <td className="py-3 px-4 border-b border-gray-300">
@@ -151,10 +190,13 @@ export default function CustomersTable() {
                     .map((t) => (
                       <p key={t.id}>{t.amount}</p>
                     ))}
-                    <div className="bg-teal-500 inline p-1 rounded text-white">Total: {calcAmount(customer.id)}</div>
-                </td> 
+                  <div className="bg-teal-500 inline p-1 rounded text-white">
+                    Total: {calcAmount(customer.id)}
+                  </div>
+                </td>
                 <td className="underline font-bold py-3 px-4 border-b border-gray-300">
-                  Click for more <i className="fa fa-angle-right text-teal-500"></i>
+                  Click for more{" "}
+                  <i className="fa fa-angle-right text-teal-500"></i>
                 </td>
               </tr>
             ))}
@@ -162,11 +204,14 @@ export default function CustomersTable() {
         </table>
       )}
 
-      {graphShow && <GraphComponent amounts={sentAmounts} selectedName={selectedName} setGraphShow={setGraphShow} dates={sentDates} />}
-
-
-
-      
+      {graphShow && (
+        <GraphComponent
+          amounts={sentAmounts}
+          selectedName={selectedName}
+          setGraphShow={setGraphShow}
+          dates={sentDates}
+        />
+      )}
     </div>
   );
 }
