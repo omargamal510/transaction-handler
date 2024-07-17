@@ -124,7 +124,7 @@ export default function CustomersTable() {
 
       {!filteredData || filteredData.length === 0 ? (
         <div>
-            <p className="text-white text-center mt-40 text-4xl">{searchName ? `Your search for "${searchName}" is not found ❌` : "No customers found.❌"}</p>
+            <p className="text-white text-center mt-40 text-4xl"> No Customers Found ❌.</p>
         </div>
       ) : (
         <table
